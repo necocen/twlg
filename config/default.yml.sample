@@ -1,0 +1,14 @@
+twitter:
+  consumer_key: ''
+  consumer_secret: ''
+  access_token_key: ''
+  access_token_secret: ''
+  user_id: 0
+mongodb:
+  host: 'localhost'
+  port: 27017
+  db: 'tweets'
+groonga:
+  host: 'localhost'
+  port: 10041
+  db: 'tweets'
