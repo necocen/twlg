@@ -26,13 +26,13 @@ router.search = function(socket) {
 	    return 'text:@' + arg;
 	}).join(' + ');
     debug(args);
-    utils.promiseToGroonga('/select?table=Tweets&query=' + encodeURIComponent(args) + '&output_columns=_key&limit=30', 'GET')
+    utils.promiseToGroonga('/select?table=Tweets&query=' + encodeURIComponent(args) + '&sortby=-created_at&output_columns=_key&limit=30', 'GET')
 	.then(function(value) {
 		var arr = JSON.parse(value)[1][0];
 		arr.shift();
 		arr.shift();
 		var ids = [].concat.apply([], arr);
-		Tweet.find({id_str: {'$in': ids}}, function(err, docs){
+		Tweet.find({id_str: {'$in': ids}}, null, {sort: {created_at: -1}}, function(err, docs){
 			socket.emit('message', docs);
 		    });
 	    });
