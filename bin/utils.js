@@ -1,6 +1,4 @@
 var http = require('q-io/http');
-var yaml = require('js-yaml');
-var fs = require('fs');
 var config = require('config');
 
 
