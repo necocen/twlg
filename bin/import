@@ -15,7 +15,7 @@ var promise = utils.promiseToGroonga('/status', 'GET')
     .then(utils.promiseToGroonga('/table_create?name=Tweets&key_type=ShortText', 'GET'))
     .then(utils.promiseToGroonga('/column_create?table=Tweets&name=text&flags=COLUMN_SCALAR&type=ShortText', 'GET'))
     .then(utils.promiseToGroonga('/column_create?table=Tweets&name=created_at&flags=COLUMN_SCALAR&type=Time', 'GET'))
-    .then(utils.promiseToGroonga('/table_create?name=Lexicon&flags=TABLE_PAT_KEY&key_type=ShortText&default_tokenizer=TokenBigram&normalizer=NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark', 'GET'))
+    .then(utils.promiseToGroonga('/table_create?name=Lexicon&flags=TABLE_PAT_KEY&key_type=ShortText&default_tokenizer=' + config.groonga.tokenizer + '&normalizer=' + config.groonga.normalizer, 'GET'))
     .then(utils.promiseToGroonga('/column_create?table=Lexicon&name=tweet_text&flags=COLUMN_INDEX|WITH_POSITION&type=Tweets&source=text', 'GET'));
 
 var db = mongoose.connection;

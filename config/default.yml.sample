@@ -12,3 +12,5 @@ groonga:
   host: 'localhost'
   port: 10041
   db: 'tweets'
+  tokenizer: 'TokenBigram'
+  normalizer: 'NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark'
