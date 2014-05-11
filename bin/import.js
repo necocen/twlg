@@ -1,0 +1,60 @@
+var mongoose = require('mongoose');
+var config = require('config');
+var debug = require('debug')('importer');
+var utils = require('./utils.js');
+
+mongoose.connect('mongodb://' + config.mongodb.host + ':' + config.mongodb.port + '/' + config.mongodb.db);
+
+var promise = utils.promiseToGroonga('/status', 'GET')
+    .then(utils.promiseToGroonga('/column_remove?table=Lexicon&name=tweet_text', 'GET'))
+    .then(utils.promiseToGroonga('/table_remove?name=Lexicon', 'GET'))
+    .then(utils.promiseToGroonga('/column_remove?table=Tweets&name=text', 'GET'))
+    .then(utils.promiseToGroonga('/column_remove?table=Tweets&name=created_at', 'GET'))
+    .then(utils.promiseToGroonga('/table_remove?name=Tweets', 'GET'))
+    .then(utils.promiseToGroonga('/table_create?name=Tweets&key_type=ShortText', 'GET'))
+    .then(utils.promiseToGroonga('/column_create?table=Tweets&name=text&flags=COLUMN_SCALAR&type=ShortText', 'GET'))
+    .then(utils.promiseToGroonga('/column_create?table=Tweets&name=created_at&flags=COLUMN_SCALAR&type=Time', 'GET'))
+    .then(utils.promiseToGroonga('/table_create?name=Lexicon&flags=TABLE_PAT_KEY&key_type=ShortText&default_tokenizer=TokenBigram&normalizer=NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark', 'GET'))
+    .then(utils.promiseToGroonga('/column_create?table=Lexicon&name=tweet_text&flags=COLUMN_INDEX|WITH_POSITION&type=Tweets&source=text', 'GET'));
+
+var db = mongoose.connection;
+
+var tweetSchema = require('../models/tweet.js');
+var fs = require('fs');
+var Tweet = mongoose.model('Tweet', tweetSchema);
+
+// 以前のDBのドロップ
+db.collections['tweets'].drop();
+
+// インデックスの読み込み
+eval(fs.readFileSync(__dirname + '/../import/data/js/tweet_index.js').toString());
+
+// 月ごとに追加
+// 非同期なのでPromiseをthenでつないで直列実行する（いっぺんにやろうとするとメモリを食いつぶす）
+tweet_index.forEach(function(month){
+	promise = promise.then(function() {
+		debug('start: ' + month.file_name);
+		var tweetsJSON = fs.readFileSync(__dirname + '/../import/' + month.file_name).toString().split('\n');
+		tweetsJSON.shift();
+		var tweets = JSON.parse(tweetsJSON.join('\n'));
+
+		// mongodb
+		return Tweet.create(tweets, function() {
+			debug('mongodb inserted: ' + month.file_name);
+		    }).then(function() {
+			    // groonga
+			    var json = JSON.stringify(tweets.map(function(tweet){
+					var createdAt = new Date(tweet.created_at);
+					var text = utils.urlExpandedText(tweet);
+					return {_key: tweet.id_str, text: text, created_at: createdAt.getTime() / 1000.0};
+				    }));
+			    return utils.promiseToGroonga('/load?table=Tweets', 'POST', [json]);
+			}).then(function() {debug('groonga inserted: ' + month.file_name);})
+	    });
+    });
+
+// 日付情報の訂正？
+promise.then(function() {
+	debug('done');
+	return 0;
+    }).finally(process.exit);
