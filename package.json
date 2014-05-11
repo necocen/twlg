@@ -13,11 +13,13 @@
     "body-parser": "~1.0.0",
     "debug": "~0.7.4",
     "ejs": "~0.8.5",
-    "config": "*",
     "q": "~2.0.0",
     "q-io": "~1.11.0",
     "mongoose": "~3.8.0",
     "bignumber.js": "*",
-    "twitter": "~0.2.9"
+    "twitter": "~0.2.9",
+    "socket.io": "^0.9.16",
+    "config": "^0.4.35",
+    "js-yaml": "^3.0.2"
   }
 }

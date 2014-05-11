@@ -3,9 +3,33 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <base href="http://192.168.0.43/nodejs/">
+    <script src="socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      var socket = io.connect('http://192.168.0.43', {resource: 'nodejs/socket.io'});
+      socket.on('connect', function(msg) {
+        console.log("connect");
+        document.getElementById("connectId").innerHTML = "ID: " + socket.socket.transport.sessid;
+        document.getElementById("type").innerHTML = "type: " + socket.socket.transport.name;
+      });
+      socket.on('message', function(msg) {
+      document.getElementById("receivedMessage").innerHTML = msg.map(function(tweet) {
+      return tweet.text;
+      }).join('<br>');
+      });
+      function sendMessage() {
+        var msg = document.getElementById("message").value;
+        socket.emit('message', {value: msg});
+      }
+    </script>
   </head>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <div id="connectId"></div>
+    <div id="type"></div>
+    <input type="text" id="message" value="" oninput="sendMessage()">
+    <input type="button" value="メッセージを送る" onclick="sendMessage()">
+    <div id="receivedMessage"></div>
   </body>
 </html>
