@@ -17,8 +17,6 @@
     "q": "~2.0.0",
     "q-io": "~1.11.0",
     "mongoose": "~3.8.0",
-    "mongoose-long": "~0.0.2",
-    "json-bigint": "~0.0.2",
     "bignumber.js": "*",
     "twitter": "~0.2.9"
   }
