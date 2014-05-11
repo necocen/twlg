@@ -3,10 +3,9 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <base href="http://192.168.0.43/nodejs/">
     <script src="socket.io/socket.io.js"></script>
     <script type="text/javascript">
-      var socket = io.connect('http://192.168.0.43', {resource: 'nodejs/socket.io'});
+      var socket = io.connect('http://192.168.0.43');
       socket.on('connect', function(msg) {
         console.log("connect");
         document.getElementById("connectId").innerHTML = "ID: " + socket.socket.transport.sessid;
