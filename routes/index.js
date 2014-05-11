@@ -13,7 +13,8 @@ var Tweet = mongoose.model('Tweet', tweetSchema);
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Express' });
+	var host = req.headers['x-forwarded-host'] || req.headers.host;
+	res.render('index', { title: 'Express', host: host });
 
 });
 
