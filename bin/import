@@ -2,7 +2,6 @@
 
 var mongoose = require('mongoose');
 var config = require('config');
-var debug = require('debug')('importer');
 var utils = require('./utils.js');
 
 mongoose.connect('mongodb://' + config.mongodb.host + ':' + config.mongodb.port + '/' + config.mongodb.db);
@@ -24,6 +23,7 @@ var db = mongoose.connection;
 var tweetSchema = require('../models/tweet.js');
 var fs = require('fs');
 var Tweet = mongoose.model('Tweet', tweetSchema);
+Tweet.ensureIndexes();
 
 // 以前のDBのドロップ
 db.collections['tweets'].drop();
@@ -35,14 +35,14 @@ eval(fs.readFileSync(__dirname + '/../import/data/js/tweet_index.js').toString()
 // 非同期なのでPromiseをthenでつないで直列実行する（いっぺんにやろうとするとメモリを食いつぶす）
 tweet_index.forEach(function(month){
 	promise = promise.then(function() {
-		debug('start: ' + month.file_name);
+		console.log('start: ' + month.file_name);
 		var tweetsJSON = fs.readFileSync(__dirname + '/../import/' + month.file_name).toString().split('\n');
 		tweetsJSON.shift();
 		var tweets = JSON.parse(tweetsJSON.join('\n'));
 
 		// mongodb
 		return Tweet.create(tweets, function() {
-			debug('mongodb inserted: ' + month.file_name);
+			console.log('mongodb inserted: ' + month.file_name);
 		    }).then(function() {
 			    // groonga
 			    var json = JSON.stringify(tweets.map(function(tweet){
@@ -51,12 +51,12 @@ tweet_index.forEach(function(month){
 					return {_key: tweet.id_str, text: text, created_at: createdAt.getTime() / 1000.0};
 				    }));
 			    return utils.promiseToGroonga('/load?table=Tweets', 'POST', [json]);
-			}).then(function() {debug('groonga inserted: ' + month.file_name);})
+			}).then(function() {console.log('groonga inserted: ' + month.file_name);})
 	    });
     });
 
 // 日付情報の訂正？
 promise.then(function() {
-	debug('done');
+	console.log('done');
 	return 0;
     }).finally(process.exit);
