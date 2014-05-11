@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 module.exports = mongoose.Schema({
 	contributors: [{id_str: String, screen_name: String}],
 	coordinates: {coordinates: [Number], type: String},
-	created_at: Date,
+	created_at: {type: Date, index: true},
 	current_user_retweet: {id_str: String},
 	entities: {hashtags: [{indices: [Number], text: String}],
 		   media: [{display_url: String,
@@ -23,7 +23,7 @@ module.exports = mongoose.Schema({
 	favorite_count: Number,
 	favorited: Boolean,
 	filter_level: String,
-	id_str: String,
+	id_str: {type: String, unique: true},
 	in_reply_to_screen_name: String,
 	in_reply_to_status_id_str: String,
 	lang: String,
