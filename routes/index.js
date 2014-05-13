@@ -14,7 +14,7 @@ var Tweet = mongoose.model('Tweet', tweetSchema);
 /* GET home page. */
 router.get('/', function(req, res) {
 	var host = req.headers['x-forwarded-host'] || req.headers.host;
-	res.render('index', { title: 'Express', host: host });
+	res.render('index', { title: 'log_t @necocen', host: host });
 
 });
 
