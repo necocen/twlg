@@ -3,11 +3,11 @@ angular.module('twlg', ['twlgServices'])
 			 socket.on('connect', function(msg) {
 				 console.log('connect');
 			 });
-			 socket.on('message', function(msg) {
+			 socket.on('search', function(msg) {
 				 $scope.tweets = msg;
 			 });
 			 $scope.query = '';
 			 $scope.$watch('query', function() {
-				 socket.emit('message', {value: $scope.query});
+				 socket.emit('search', {value: $scope.query});
 			 });
 		 }]);

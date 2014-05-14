@@ -19,8 +19,8 @@ router.get('/', function(req, res) {
 
 router.search = function(socket) {
   debug("connection");
-  socket.on('message', function(data) {
-    debug('message');
+  socket.on('search', function(data) {
+    debug('search');
     var args = data.value.split(/[ 　]/).map(function(arg){
 	    arg = arg.replace('\\', '\\\\').replace('"', '\\"').replace('\'', '\\\'').replace('(', '\\(').replace(')', '\\)').replace(' ', '\\ ');
 	    return 'text:@' + arg;
@@ -33,7 +33,7 @@ router.search = function(socket) {
 		arr.shift();
 		var ids = [].concat.apply([], arr);
 		Tweet.find({id_str: {'$in': ids}}, null, {sort: {created_at: -1}}, function(err, docs){
-			socket.emit('message', docs);
+			socket.emit('search', docs);
 		    });
 	    });
       });
