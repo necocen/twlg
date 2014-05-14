@@ -10,7 +10,7 @@
   </head>
   <body ng-controller="TwlgCtrl">
     <h1><img src="/images/top.png" alt="log_t @necocen"></h1>
-    <input type="text" ng-model="query" ng-change="search()">
+    <input type="text" ng-model="query">
     <div ng-repeat="tweet in tweets">
       <p>{{tweet.text}}</p>
     </div>
