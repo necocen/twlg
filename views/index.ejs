@@ -5,7 +5,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="socket.io/socket.io.js"></script>
     <script type="text/javascript">
-      var socket = io.connect('http://<%= host %>');
+      var socket = io.connect();
       socket.on('connect', function(msg) {
         console.log("connect");
         document.getElementById("connectId").innerHTML = "ID: " + socket.socket.transport.sessid;
