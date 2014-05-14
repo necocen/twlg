@@ -1,34 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="twlg">
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="socket.io/socket.io.js"></script>
-    <script type="text/javascript">
-      var socket = io.connect();
-      socket.on('connect', function(msg) {
-        console.log("connect");
-        document.getElementById("connectId").innerHTML = "ID: " + socket.socket.transport.sessid;
-        document.getElementById("type").innerHTML = "type: " + socket.socket.transport.name;
-      });
-      socket.on('message', function(msg) {
-      document.getElementById("receivedMessage").innerHTML = msg.map(function(tweet) {
-      return tweet.text;
-      }).join('<br>');
-      });
-      function sendMessage() {
-        var msg = document.getElementById("message").value;
-        socket.emit('message', {value: msg});
-      }
-    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular.min.js"></script>
+    <script src="/javascripts/app.js"></script>
+    <script src="/javascripts/services.js"></script>
   </head>
-  <body>
+  <body ng-controller="TwlgCtrl">
     <h1><img src="/images/top.png" alt="log_t @necocen"></h1>
-    <p>Welcome to <%= title %></p>
-    <div id="connectId"></div>
-    <div id="type"></div>
-    <input type="text" id="message" value="" oninput="sendMessage()">
-    <input type="button" value="メッセージを送る" onclick="sendMessage()">
-    <div id="receivedMessage"></div>
+    <input type="text" ng-model="query" ng-change="search()">
+    <div ng-repeat="tweet in tweets">
+      <p>{{tweet.text}}</p>
+    </div>
   </body>
 </html>
