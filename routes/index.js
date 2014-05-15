@@ -23,7 +23,7 @@ router.search = function(socket) {
     debug('search');
     var args = data.value.split(/[ 　]/).map(function(arg){
 	    arg = arg.replace('\\', '\\\\').replace('"', '\\"').replace('\'', '\\\'').replace('(', '\\(').replace(')', '\\)').replace(' ', '\\ ');
-	    return 'text:@' + arg;
+	    return 'text:@"' + arg + '"';
 	}).join(' + ');
     debug(args);
     utils.promiseToGroonga('/select?table=Tweets&query=' + encodeURIComponent(args) + '&sortby=-created_at&output_columns=_key&limit=30', 'GET')
