@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var config = require('config');
 var utils = require('./utils.js');
+var xmlEntities = new (require('html-entities').XmlEntities);
 
 mongoose.connect('mongodb://' + config.mongodb.host + ':' + config.mongodb.port + '/' + config.mongodb.db);
 
@@ -47,7 +48,7 @@ tweet_index.forEach(function(month){
 			    // groonga
 			    var json = JSON.stringify(tweets.map(function(tweet){
 					var createdAt = new Date(tweet.created_at);
-					var text = utils.urlExpandedText(tweet);
+					var text = xmlEntities.decode(utils.urlExpandedText(tweet));
 					return {_key: tweet.id_str, text: text, created_at: createdAt.getTime() / 1000.0};
 				    }));
 			    return utils.promiseToGroonga('/load?table=Tweets', 'POST', [json]);

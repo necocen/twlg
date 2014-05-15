@@ -20,6 +20,7 @@
     "twitter": "~0.2.9",
     "socket.io": "^0.9.16",
     "config": "^0.4.35",
-    "js-yaml": "^3.0.2"
+    "js-yaml": "^3.0.2",
+    "html-entities": "^1.0.10"
   }
 }
