@@ -1,23 +1,27 @@
 var mongoose = require('mongoose');
+var mediaSchema = mongoose.Schema({
+display_url: String,
+expanded_url: String,
+id_str: String,
+indices: [Number],
+media_url: String,
+media_url_https: String,
+sizes:{thumb: {h: Number, resize: String, w: Number},
+large: {h: Number, resize: String, w: Number},
+medium: {h: Number, resize: String, w: Number},
+small: {h: Number, resize: String, w: Number}},
+source_status_id_str: String,
+type: String,
+url: String
+});
+
 module.exports = mongoose.Schema({
 	contributors: [{id_str: String, screen_name: String}],
 	coordinates: {coordinates: [Number], type: String},
 	created_at: {type: Date, index: true},
 	current_user_retweet: {id_str: String},
 	entities: {hashtags: [{indices: [Number], text: String}],
-		   media: [{display_url: String,
-			    expanded_url: String,
-			    id_str: String,
-			    indices: [Number],
-			    media_url: String,
-			    media_url_https: String,
-			    sizes:{thumb: {h: Number, resize: String, w: Number},
-				   large: {h: Number, resize: String, w: Number},
-				   medium: {h: Number, resize: String, w: Number},
-				   small: {h: Number, resize: String, w: Number}},
-			    source_status_id_str: String,
-			    type: String,
-			    url: String}],
+		   media: [mediaSchema],
 		   urls: [{indices: [Number], url: String, display_url: String, expanded_url: String}],
 		   user_mentions: [{name: String, indices: [Number], screen_name: String, id_str: String}]},
 	favorite_count: Number,
@@ -106,3 +110,4 @@ module.exports = mongoose.Schema({
 	withheld_in_countries: [String],
 	with_scope: String
     });
+

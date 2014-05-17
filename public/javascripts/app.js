@@ -1,5 +1,5 @@
 angular.module('twlg', ['twlgServices', 'twlgFilters', 'ngSanitize'])
-		 .controller('TwlgCtrl', ['$scope', 'baseTweetFilter', 'socket', function ($scope, baseTweetFilter, socket) {
+		 .controller('TwlgCtrl', ['$scope', 'baseTweetFilter', 'expandUrlsFilter', 'socket', function ($scope, baseTweetFilter, expandUrlsFilter, socket) {
 			 socket.on('connect', function(msg) {
 				 console.log('connect');
 			 });
@@ -11,4 +11,5 @@ angular.module('twlg', ['twlgServices', 'twlgFilters', 'ngSanitize'])
 				 socket.emit('search', {value: $scope.query});
 			 });
 			 $scope.baseTweet = baseTweetFilter;
+			 $scope.expandUrls = expandUrlsFilter;
 		 }]);

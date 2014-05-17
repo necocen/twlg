@@ -18,7 +18,7 @@
       <ul>
         <li><a ng-href="{{tweet|baseTweet|userPage}}" ng-bind-html="'@' + baseTweet(tweet).user.screen_name + ' / ' + baseTweet(tweet).user.name"></a></li>
       </ul>
-      <p ng-bind-html="baseTweet(tweet).text"></p>
+      <p ng-bind-html="expandUrls(baseTweet(tweet))"></p>
       <ul>
         <li><a ng-href="{{tweet|baseTweet|permalink}}"><time>{{baseTweet(tweet).created_at | date: 'yyyy-MM-dd HH:mm:ss'}}</time></a></li>
         <li><a ng-href="{{tweet|baseTweet|favstar}}">★</a></li>
