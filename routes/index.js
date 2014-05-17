@@ -29,11 +29,11 @@ router.search = function(socket) {
     utils.promiseToGroonga('/select?table=Tweets&query=' + encodeURIComponent(args) + '&sortby=-created_at&output_columns=_key&limit=30', 'GET')
 	.then(function(value) {
 		var arr = JSON.parse(value)[1][0];
-		arr.shift();
-		arr.shift();
+		var hitCount = arr.shift()[0];
+		var columns = arr.shift();
 		var ids = [].concat.apply([], arr);
 		Tweet.find({id_str: {'$in': ids}}, null, {sort: {created_at: -1}}, function(err, docs){
-			socket.emit('search', docs);
+			socket.emit('search', {result: docs, count: hitCount});
 		    });
 	    });
       });

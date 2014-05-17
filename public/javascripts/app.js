@@ -4,8 +4,10 @@ angular.module('twlg', ['twlgServices', 'twlgFilters', 'ngSanitize'])
 				 console.log('connect');
 			 });
 			 socket.on('search', function(msg) {
-				 $scope.tweets = msg;
+				 $scope.tweets = msg.result;
+				 $scope.count = msg.count;
 			 });
+			 $scope.count = 0;
 			 $scope.query = '';
 			 $scope.$watch('query', function() {
 				 socket.emit('search', {value: $scope.query});

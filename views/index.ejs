@@ -12,7 +12,7 @@
   </head>
   <body ng-controller="TwlgCtrl">
     <h1><img src="/images/top.png" alt="log_t @necocen"></h1>
-    <input type="text" ng-model="query">
+    <input type="text" ng-model="query"><p>count: {{count}}</p>
     <div ng-repeat="tweet in tweets">
       <img ng-src="{{baseTweet(tweet).user.profile_image_url_https}}">
       <ul>
