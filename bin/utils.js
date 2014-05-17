@@ -18,6 +18,9 @@ module.exports = {
     urlExpandedText: function(tweet) {
 	var text = tweet.text;
 	var extendedLength = 0; // URL置換によって伸びた長さの保存
+			tweet.entities.urls.sort(function(a, b){
+				return a.indices[0] - b.indices[0];
+			});
 	tweet.entities.urls.forEach(function(url) {
 		var urlFrom = url.indices[0] + extendedLength;
 		var urlTo = url.indices[1] + extendedLength;
