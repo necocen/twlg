@@ -1,8 +1,70 @@
+* {
+margin: 0;
+padding: 0;
+}
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	overflow-y: scroll;
+	background-color: #632c89;
 }
 
-a {
-  color: #00B7FF;
+div.main {
+	margin: 0 auto;
+	width: 600px;
 }
+
+div.head {
+	text-align: center;
+}
+
+div.head p.count {
+	color: white;
+}
+
+article.tweets {
+	width: 600px;
+	margin: 2ex 0;
+	border-radius: 2ex;
+	background-color: white;
+}
+
+article.tweets img {
+	width: 48px;
+	height: 48px;
+	padding: 2ex 0 2ex 2ex;
+	float: left;
+}
+
+article.tweets div.right {
+	width: calc(600px - 48px - 6ex);
+	margin-left: calc(48px + 2ex);
+	padding: 2ex;
+}
+article.tweets div.right:after {
+	clear: both;
+}
+
+article.tweets p {
+	margin: 1ex 0;
+	text-align: justify;
+}
+
+article.tweets ul li {
+	display: inline-block;
+	color: gray;
+}
+
+article.tweets ul li a {
+	color: inherit;
+}
+
+article.tweets ul li:before {
+	content: " / ";
+}
+
+article.tweets ul li:first-child:before {
+	content: "";
+}
+
