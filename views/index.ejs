@@ -5,14 +5,26 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="socket.io/socket.io.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.16/angular-sanitize.min.js"></script>
     <script src="/javascripts/app.js"></script>
     <script src="/javascripts/services.js"></script>
+    <script src="/javascripts/filters.js"></script>
   </head>
   <body ng-controller="TwlgCtrl">
     <h1><img src="/images/top.png" alt="log_t @necocen"></h1>
     <input type="text" ng-model="query">
     <div ng-repeat="tweet in tweets">
-      <p>{{tweet.text}}</p>
+      <img ng-src="{{baseTweet(tweet).user.profile_image_url_https}}">
+      <ul>
+        <li><a ng-href="{{tweet|baseTweet|userPage}}" ng-bind-html="'@' + baseTweet(tweet).user.screen_name + ' / ' + baseTweet(tweet).user.name"></a></li>
+      </ul>
+      <p ng-bind-html="baseTweet(tweet).text"></p>
+      <ul>
+        <li><a ng-href="{{tweet|baseTweet|permalink}}"><time>{{baseTweet(tweet).created_at | date: 'yyyy-MM-dd HH:mm:ss'}}</time></a></li>
+        <li><a ng-href="{{tweet|baseTweet|favstar}}">★</a></li>
+        <li ng-bind-html="'From: ' + baseTweet(tweet).source"></li>
+      </ul>
     </div>
   </body>
 </html>
+
